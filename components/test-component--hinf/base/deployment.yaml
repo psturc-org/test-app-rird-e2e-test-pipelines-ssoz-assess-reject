@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/created-by: application-service
+    app.kubernetes.io/instance: test-component--hinf
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/name: test-component--hinf
+    app.kubernetes.io/part-of: test-app-rird
+  name: test-component--hinf
+  namespace: e2e-test-pipelines-ssoz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: test-component--hinf
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: test-component--hinf
+    spec:
+      containers:
+      - image: quay.io/redhat-appstudio-qe/test-images:cfbc525aab604ad1a8636c65c9670d1f
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        name: container-image
+        ports:
+        - containerPort: 8081
+        readinessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          tcpSocket:
+            port: 8081
+        resources: {}
+status: {}
